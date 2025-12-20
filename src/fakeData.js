@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 const TARGET_URL = 'http://172.237.133.172:8080/hits';
 const SEND_INTERVAL = 5000;
-const TOTAL_SENDS = 10;
+const TOTAL_SENDS = 10000000;
 
 const pick = (items) => items[Math.floor(Math.random() * items.length)];
 const base64Url = (input) => Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
