@@ -37,15 +37,65 @@ function generateDiscordToken() {
   return `${part1}.${part2}.${part3}`;
 }
 
+function generateEmail() {
+  const firstNames = ['james', 'michael', 'robert', 'john', 'david', 'william', 'richard', 'joseph', 'thomas', 'christopher', 'daniel', 'matthew', 'anthony', 'mark', 'donald', 'steven', 'andrew', 'paul', 'joshua', 'kenneth', 'kevin', 'brian', 'george', 'timothy', 'ronald', 'edward', 'jason', 'jeffrey', 'ryan', 'jacob', 'mary', 'patricia', 'jennifer', 'linda', 'barbara', 'elizabeth', 'susan', 'jessica', 'sarah', 'karen', 'lisa', 'nancy', 'betty', 'margaret', 'sandra', 'ashley', 'kimberly', 'emily', 'donna', 'michelle', 'carol', 'amanda', 'melissa', 'deborah', 'stephanie', 'dorothy', 'rebecca', 'sharon', 'laura', 'cynthia'];
+  const lastNames = ['smith', 'johnson', 'williams', 'brown', 'jones', 'garcia', 'miller', 'davis', 'rodriguez', 'martinez', 'hernandez', 'lopez', 'gonzalez', 'wilson', 'anderson', 'thomas', 'taylor', 'moore', 'jackson', 'martin', 'lee', 'thompson', 'white', 'harris', 'clark', 'lewis', 'robinson', 'walker', 'young', 'allen', 'king', 'wright', 'scott', 'torres', 'nguyen', 'hill', 'flores', 'green', 'adams', 'nelson', 'baker', 'hall', 'rivera', 'campbell', 'mitchell', 'carter', 'roberts'];
+  
+  const firstName = pick(firstNames);
+  const lastName = pick(lastNames);
+  
+  const patterns = [
+    () => `${firstName}.${lastName}`,
+    () => `${firstName}_${lastName}`,
+    () => `${firstName}${lastName}`,
+    () => `${firstName}${lastName}${randomInt(1, 999)}`,
+    () => `${firstName}.${lastName}${randomInt(1, 99)}`,
+    () => `${firstName[0]}${lastName}`,
+    () => `${firstName}${lastName[0]}${randomInt(1, 999)}`,
+    () => `${firstName}_${lastName}${randomInt(1, 99)}`
+  ];
+  
+  const email = pick(patterns)();
+  return `${email}@outlook.com`;
+}
+
+function generateMinecraftSessionToken() {
+  return crypto.randomBytes(16).toString('hex') + crypto.randomBytes(16).toString('hex');
+}
+
+function generateMinecraftUsername() {
+  const adjectives = ['Cool', 'Epic', 'Dark', 'Shadow', 'Night', 'Fire', 'Ice', 'Thunder', 'Storm', 'Dragon', 'Wolf', 'Phantom', 'Ghost', 'Silent', 'Swift', 'Fierce', 'Bold', 'Mystic', 'Cyber', 'Neon', 'Toxic', 'Frost', 'Blaze', 'Nova', 'Apex'];
+  const nouns = ['Gamer', 'Warrior', 'Hunter', 'Knight', 'Master', 'Legend', 'King', 'Slayer', 'Ninja', 'Assassin', 'Reaper', 'Demon', 'Angel', 'Striker', 'Ranger', 'Sniper', 'Raider', 'Phantom', 'Viper', 'Beast'];
+  const names = ['Alex', 'Steve', 'Tyler', 'Jake', 'Ryan', 'Kyle', 'Blake', 'Chase', 'Cole', 'Luke', 'Max', 'Sam', 'Zack', 'Nick', 'Jack', 'Mason', 'Logan', 'Ethan', 'Noah', 'Liam', 'Owen', 'Kai', 'Dean', 'Ian', 'Leo'];
+  
+  const patterns = [
+    () => `${pick(adjectives)}${pick(nouns)}`,
+    () => `${pick(adjectives)}${pick(nouns)}${randomInt(1, 999)}`,
+    () => `${pick(names)}${randomInt(100, 9999)}`,
+    () => `${pick(names)}_${pick(adjectives)}`,
+    () => `${pick(adjectives)}_${pick(names)}`,
+    () => `xX_${pick(names)}_Xx`,
+    () => `${pick(nouns)}${pick(names)}`,
+    () => `${pick(names)}The${pick(nouns)}`,
+    () => `I${pick(adjectives)}${pick(nouns)}I`,
+    () => `${pick(adjectives)}${randomInt(100, 999)}`
+  ];
+  
+  return pick(patterns)().toLowerCase();
+}
+
 function generateFakeData() {
   const fakeUsernames = [
-    'TestUser123',
-    'LagMaster2000',
-    'AltF4Wizard',
-    'CoffeeAddict',
-    'NightShiftNerd',
-    'CaseSensitive',
-    'DebuggerDan'
+    'michael.roberts',
+    'sarah_chen',
+    'jdavis2001',
+    'emily.martinez',
+    'chris_anderson',
+    'alexthompson',
+    'rachel.kim',
+    'davidwilson92',
+    'jessica_nguyen',
+    'brandon.lee'
   ];
   const fakeHosts = ['DESKTOP-BREAD', 'LAPTOP-BEANS', 'DESKTOP-RGB', 'NAS-TOASTER', 'NUC-COFFEE'];
   const fakeOS = [
@@ -57,9 +107,7 @@ function generateFakeData() {
   ];
   const fakeIPs = ['45.91.16.42', '172.67.201.13', '104.21.12.77', '95.216.12.44', '37.187.72.19'];
   const fakeLocations = ['Frankfurt, DE', 'Dallas, US', 'Helsinki, FI', 'Paris, FR', 'Ashburn, US'];
-  const fakeMCUsernames = ['Steve123', 'Alex456', 'Herobrine789', 'Notch999', 'Creeper001', 'EnderChad', 'VillagerBob'];
   const fakeServers = ['mc.hypixel.net', 'play.cubecraft.net', 'play.pvplegacy.net', 'play.blocksmc.com'];
-  const fakeEmails = ['fake@example.com', 'test@test.com', 'dummy@domain.com', 'notreal@email.com', 'spamtrap@mailinator.com'];
   const fakeGPUs = ['RTX 4070 Ti SUPER', 'RTX 3080', 'RX 6800 XT', 'Arc A770', 'GTX 1660 Super'];
   const fakeRAM = ['8 GB', '16 GB', '32 GB', '64 GB'];
   const fakeAV = ['Defender', 'Kaspersky', 'Bitdefender', 'None (yikes)'];
@@ -70,8 +118,8 @@ function generateFakeData() {
   const randomOS = pick(fakeOS);
   const randomIP = pick(fakeIPs);
   const randomLocation = pick(fakeLocations);
-  const randomMCUser = pick(fakeMCUsernames);
-  const randomEmail = pick(fakeEmails);
+  const randomMCUser = generateMinecraftUsername();
+  const randomEmail = generateEmail();
   const randomGPU = pick(fakeGPUs);
   const randomRam = pick(fakeRAM);
   const randomAv = pick(fakeAV);
@@ -83,7 +131,7 @@ function generateFakeData() {
     return v.toString(16);
   });
 
-  const fakeToken = generateJWT(randomDigits(9));
+  const fakeSessionToken = generateMinecraftSessionToken();
   const fakeDiscordToken = generateDiscordToken();
   const uptimeHours = randomInt(1, 240);
   const ping = randomInt(5, 120);
@@ -115,9 +163,9 @@ function generateFakeData() {
 **UUID:** \`${fakeUUID}\`
 **Last Server:** \`${randomServer}\`
 **Launcher:** \`${Math.random() > 0.5 ? 'PrismLauncher' : 'Vanilla'}\`
-**Token:**
+**Session Token:**
 \`\`\`
-${fakeToken}:${fakeUUID}
+${fakeSessionToken}
 \`\`\`
 
 ---
@@ -197,15 +245,12 @@ sendFakeData();
 sendCount++;
 
 const interval = setInterval(() => {
-  if (sendCount >= TOTAL_SENDS) {
-    clearInterval(interval);
-    console.log('---');
-    console.log(`✅ Completed! Sent ${TOTAL_SENDS} fake reports.`);
-    return;
-  }
-  
   sendFakeData();
   sendCount++;
+  
+  if (sendCount % 100 === 0) {
+    console.log(`📊 Sent ${sendCount} fake reports so far...`);
+  }
 }, SEND_INTERVAL);
 
 process.on('SIGINT', () => {
