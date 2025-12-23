@@ -1,19 +1,19 @@
 import forgeflower from "forgeflower";
 import fetch from "node-fetch";
 import { mkdirSync, rmdirSync, rmSync, writeFileSync } from "fs";
-import { readdir, readFile } from 'fs/promises';
+import { readdir, readFile } from "fs/promises";
 import { dirname, extname, join, relative } from "path";
 import { fileURLToPath } from "url";
 
 const findWebhooks = async (dir, options = {}) => {
-  const { exclude = ['node_modules', '.git'], extensions = null } = options;
+  const { exclude = ["node_modules", ".git"], extensions = null } = options;
   const results = [];
-  
+
   const scan = async (currentPath) => {
     const entries = await readdir(currentPath, { withFileTypes: true });
     for (const entry of entries) {
       if (exclude.includes(entry.name)) continue;
-      
+
       const fullPath = join(currentPath, entry.name);
       if (entry.isDirectory()) {
         await scan(fullPath);
@@ -22,27 +22,29 @@ const findWebhooks = async (dir, options = {}) => {
       }
     }
   };
-  
+
   function shouldCheckFile(filename) {
     return !extensions || extensions.includes(extname(filename));
   }
-  
+
   const checkFile = async (filePath) => {
     try {
-      const content = await readFile(filePath, 'utf8');
-      const matches = content.match(/https:\/\/discord(?:app)?\.com\/api\/webhooks\/\d+\/[\w-]+/g);
-      
+      const content = await readFile(filePath, "utf8");
+      const matches = content.match(
+        /https:\/\/discord(?:app)?\.com\/api\/webhooks\/\d+\/[\w-]+/g,
+      );
+
       if (matches) {
-        [...new Set(matches)].forEach(webhook => {
+        [...new Set(matches)].forEach((webhook) => {
           results.push({
             webhook,
-            file: relative(dir, filePath)
+            file: relative(dir, filePath),
           });
         });
       }
     } catch (err) {}
   };
-  
+
   await scan(dir);
   return results;
 };
@@ -79,15 +81,17 @@ export const decompileJarAndDeleteWebhooks = async (inputJar) => {
   await forgeflower(inputJar, outputDir);
 
   rmSync(inputJar, {
-    recursive: true, 
-    force: true
+    recursive: true,
+    force: true,
   });
-  
-  await findWebhooks(join(__dirname, "../output/decompiled"), { 
-    extensions: ['.java']
+
+  await findWebhooks(join(__dirname, "../output/decompiled"), {
+    extensions: [".java"],
   }).then((webhooks) => {
     webhooks.forEach(async (webhook) => {
-      console.log(`Deleting webhook found in ${webhook.file}: ${webhook.webhook}`);
+      console.log(
+        `Deleting webhook found in ${webhook.file}: ${webhook.webhook}`,
+      );
       await deleteWebhook(webhook.webhook);
     });
   });
@@ -97,7 +101,6 @@ export const decompileJarAndDeleteWebhooks = async (inputJar) => {
     force: true,
   });
 };
-
 
 export const isJar = (attachment) => {
   return attachment?.name?.toLowerCase().endsWith(".jar") ?? false;
